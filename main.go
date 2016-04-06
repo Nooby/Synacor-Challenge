@@ -10,7 +10,7 @@ func main() {
 
 	var cpu = vm.CPU{}
 	err := cpu.LoadImage(challengeBinaryPath)
-	if err != err {
+	if err != nil {
 		fmt.Println(err)
 		return
 	}

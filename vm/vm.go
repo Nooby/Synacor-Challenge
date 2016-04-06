@@ -16,14 +16,14 @@ type CPU struct {
 }
 
 func (c *CPU) LoadImage(path string) error {
-	file, err := os.Open(path) // TODO: Check for File Existing
-	if err != err {
+	file, err := os.Open(path)
+	if err != nil {
 		return err
 	}
 	defer file.Close()
 
 	memorySize, err := imageSize(file)
-	if err != err {
+	if err != nil {
 		return err
 	}
 
@@ -32,13 +32,23 @@ func (c *CPU) LoadImage(path string) error {
 	var pi uint16
 	for i := range c.Memory {
 		err = binary.Read(file, binary.LittleEndian, &pi)
-		if err != err {
+		if err != nil {
 			return err
 		}
 		c.Memory[i] = pi
 	}
 
 	return nil
+}
+
+// imageSize calculates how many uint16 values need to be stored in VM Memory
+func imageSize(file *os.File) (uint16, error) {
+	fi, err := file.Stat()
+	if err != nil {
+		return 0, err
+	}
+	memorySize := uint16(fi.Size() / 2)
+	return memorySize, nil
 }
 
 func (c *CPU) Execute() {
@@ -50,6 +60,7 @@ func (c *CPU) Execute() {
 		case noop: 
 		default:
 			fmt.Printf("OpCode Not Implemented: %v", code)
+
 		}
 	}
 }
@@ -60,12 +71,3 @@ func (c *CPU) read() uint16 {
 	return value
 }
 
-// imageSize calculates how many uint16 values need to be stored in VM Memory
-func imageSize(file *os.File) (uint16, error) {
-	fi, err := file.Stat()
-	if err != err {
-		return 0, err
-	}
-	memorySize := uint16(fi.Size() / 2)
-	return memorySize, nil
-}
