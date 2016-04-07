@@ -6,7 +6,10 @@ import (
 	"encoding/binary"
 )
 
-const AdressSpace uint16 = 32768
+const (
+	addressSpace uint16 = 32768
+	validNumberRange uint16 = 32776
+)
 
 type CPU struct {
 	cursor uint16
@@ -15,7 +18,7 @@ type CPU struct {
 	Stack []uint16
 }
 
-func (c *CPU) LoadImage(path string) error {
+func (cpu *CPU) LoadImage(path string) error {
 	file, err := os.Open(path)
 	if err != nil {
 		return err
@@ -27,15 +30,15 @@ func (c *CPU) LoadImage(path string) error {
 		return err
 	}
 
-	c.Memory = make([]uint16, memorySize)
+	cpu.Memory = make([]uint16, memorySize)
 
 	var pi uint16
-	for i := range c.Memory {
+	for i := range cpu.Memory {
 		err = binary.Read(file, binary.LittleEndian, &pi)
 		if err != nil {
 			return err
 		}
-		c.Memory[i] = pi
+		cpu.Memory[i] = pi
 	}
 
 	return nil
@@ -51,23 +54,61 @@ func imageSize(file *os.File) (uint16, error) {
 	return memorySize, nil
 }
 
-func (c *CPU) Execute() {
+func (cpu *CPU) Execute() {
 	for {
-		switch code := c.read(); code {
-		case halt: c.halt()
-		case jmp: c.jmp()
-		case out: c.out()
+		switch code := cpu.read(); code {
+		case halt: cpu.halt()
+		case set: cpu.set()
+		case push: cpu.push()
+		case pop: cpu.pop()
+		case eq: cpu.eq()
+		case gt: cpu.gt()
+		case jmp: cpu.jmp()
+		case jt: cpu.jt()
+		case jf: cpu.jf()
+		case add: cpu.add()
+		case mult: cpu.mult()
+		case mod: cpu.mod()
+		case and: cpu.and()
+		case or: cpu.or()
+		case not: cpu.not()
+		case rmem: cpu.rmem()
+		case wmem: cpu.wmem()
+		case call: cpu.call()
+		case ret: cpu.ret()
+		case out: cpu.out()
 		case noop: 
 		default:
 			fmt.Printf("OpCode Not Implemented: %v", code)
-
+			return
 		}
 	}
 }
 
-func (c *CPU) read() uint16 {
-	value := c.Memory[c.cursor]
-	c.cursor += 1
-	return value
+func (cpu *CPU) read() uint16 {
+	element := cpu.Memory[cpu.cursor]
+	cpu.cursor += 1
+	if element >= validNumberRange {
+		panic("Value outside of Integer Range.")
+		
+	}
+	return element
 }
 
+func (cpu *CPU) readAsValue() uint16 {
+	element := cpu.read()
+	if element >= addressSpace {
+		register := element - addressSpace
+		element = cpu.Registers[register]
+	}
+	return element
+}
+
+func (cpu *CPU) readAsRegister() uint16 {
+	element := cpu.read()
+	if element >= addressSpace {
+		register := element - addressSpace
+		return register
+	}
+	panic(string(element) + " is not a Register.")
+}
