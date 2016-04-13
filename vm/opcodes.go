@@ -2,7 +2,6 @@ package vm
 
 import (
 	"os"
-	"fmt"
 )
 
 const (
@@ -230,15 +229,18 @@ func (cpu *CPU) ret() {
 	cpu.cursor = element
 }
 
-// out a
+// out 
 // write the character represented by ascii code <a> to the terminal
 func (cpu *CPU) out() {
-	a:= cpu.readAsValue()
-	var text = string(a)
-	fmt.Print(text)
+	a := cpu.readAsValue()
+	cpu.consoleOut<- a
 }
 
 // in a
 // read a character from the terminal and write its ascii code to <a>
-func (cpu *CPU) in() {}
+func (cpu *CPU) in() {
+	a := cpu.readAsRegister()
+	v := <-cpu.consoleIn
+	cpu.Registers[a] = v
+}
 
