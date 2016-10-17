@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/nooby/Synacor-Challenge/vm"
-	"github.com/nooby/Synacor-Challenge/term"
+	"github.com/Nooby/Synacore-Challenge/vm"
+	"github.com/Nooby/Synacore-Challenge/term"
 )
 
 func main() {
