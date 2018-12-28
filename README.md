@@ -1,5 +1,5 @@
-# Synacore-Challenge
-My Attempt at solving the Synacore Challenge
+# Synacor-Challenge
+My Attempt at solving the Synacor Challenge
 
 # Progress
 There are 8 Codes to discover.

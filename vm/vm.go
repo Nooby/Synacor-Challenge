@@ -1,6 +1,4 @@
-/*
-Package VM implements the Execution and Memory Model of the Synacore VM.
-*/
+// Package VM implements the Execution and Memory Model of the Synacor VM.
 package vm
 
 import (
