@@ -1,0 +1,25 @@
+# "Solve" Tablet Key
+take tablet
+use tablet
+
+# Navigate Dark Cave
+doorway
+north
+north
+bridge
+continue
+down
+
+# Navigate Moss
+east
+take empty lantern
+west
+west
+
+# Solve Twisty Passages
+passage
+ladder
+west
+south
+# Twisty Passages Key
+north

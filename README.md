@@ -8,7 +8,7 @@ There are 8 Codes to discover.
   - [x] Hello World Code
   - [x] Self Test Code
   - [x] Tablet Code
-  - [ ] ?
+  - [x] Twisty Passages Code
   - [ ] ?
   - [ ] ?
   - [ ] ?
